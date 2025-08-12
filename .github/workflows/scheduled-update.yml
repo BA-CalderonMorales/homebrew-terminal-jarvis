@@ -1,0 +1,93 @@
+name: Scheduled Formula Update
+
+on:
+  schedule:
+    # Run every Sunday at 9:00 AM UTC (weekly)
+    - cron: '0 9 * * 0'
+  # Allow manual trigger for testing
+  workflow_dispatch:
+    inputs:
+      force_update:
+        description: 'Force update even if already up to date'
+        required: false
+        default: false
+        type: boolean
+
+jobs:
+  update-formula:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: Update formula
+        id: update
+        uses: ./.github/actions/update-formula
+        with:
+          force-update: ${{ github.event.inputs.force_update || 'false' }}
+          
+      - name: Create Pull Request
+        if: steps.update.outputs.update-needed == 'true' && steps.update.outputs.files-changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            feat: update Terminal Jarvis to v${{ steps.update.outputs.target-version }}
+            
+            - Automated weekly update from v${{ steps.update.outputs.current-version }} to v${{ steps.update.outputs.target-version }}
+            - Updated checksums for Mac and Linux archives
+          title: "chore: update Terminal Jarvis to v${{ steps.update.outputs.target-version }}"
+          body: |
+            ## Automated Formula Update
+            
+            This PR was automatically created by the scheduled workflow to update the Terminal Jarvis Homebrew formula.
+            
+            ### Changes
+            - **Previous version:** v${{ steps.update.outputs.current-version }}
+            - **New version:** v${{ steps.update.outputs.target-version }}
+            - Updated checksums for both Mac and Linux archives
+            
+            ### Validation
+            - Formula syntax verified
+            - Checksums calculated and verified
+            - Archive URLs validated
+            
+            ### Next Steps
+            1. Review the changes
+            2. Test the formula locally if needed:
+               ```bash
+               brew tap ba-calderonmorales/terminal-jarvis
+               brew install terminal-jarvis
+               ```
+            3. Merge this PR to publish the update
+            
+            ---
+            *This PR was created automatically by the scheduled update workflow.*
+          branch: auto-update-v${{ steps.update.outputs.target-version }}
+          branch-suffix: timestamp
+          base: develop
+          delete-branch: true
+          
+      - name: Summary
+        if: always()
+        run: |
+          echo "## Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Current Version:** v${{ steps.update.outputs.current-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Target Version:** v${{ steps.update.outputs.target-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Update Needed:** ${{ steps.update.outputs.update-needed }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Files Changed:** ${{ steps.update.outputs.files-changed }}" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.update.outputs.update-needed }}" = "true" ] && [ "${{ steps.update.outputs.files-changed }}" = "true" ]; then
+            echo "- **Status:** Pull request created for review" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.update.outputs.update-needed }}" = "true" ]; then
+            echo "- **Status:** Update completed but no files changed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- **Status:** Formula already up to date" >> $GITHUB_STEP_SUMMARY
+          fi
