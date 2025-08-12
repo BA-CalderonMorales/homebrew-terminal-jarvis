@@ -54,3 +54,35 @@ build-iPhoneSimulator/
 
 # Used by RuboCop. Remote config files pulled in from inherit_from directive.
 # .rubocop-https?--*
+
+# Additional files for Homebrew formula maintenance
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Logs
+*.log
+
+# Archive files (for testing)
+*.tar.gz
+*.zip
+
+# Local environment files
+.env
+.env.local
