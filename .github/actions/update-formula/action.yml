@@ -1,0 +1,252 @@
+name: 'Update Terminal Jarvis Formula'
+description: 'Updates the Homebrew formula for Terminal Jarvis with the latest or specified version'
+
+inputs:
+  version:
+    description: 'Specific version to update to (e.g., 0.0.54). Leave empty to use latest release.'
+    required: false
+    default: ''
+  force-update:
+    description: 'Force update even if already up to date'
+    required: false
+    default: 'false'
+
+outputs:
+  current-version:
+    description: 'The version before update'
+    value: ${{ steps.check.outputs.current_version }}
+  target-version:
+    description: 'The target version for update'
+    value: ${{ steps.check.outputs.target_version }}
+  update-needed:
+    description: 'Whether an update was needed'
+    value: ${{ steps.check.outputs.update_needed }}
+  files-changed:
+    description: 'Whether any files were changed'
+    value: ${{ steps.update.outputs.files_changed }}
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Set up environment
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq curl
+        
+    - name: Configure git
+      shell: bash
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+    - name: Make scripts executable
+      shell: bash
+      run: |
+        chmod +x scripts/setup.sh
+        chmod +x scripts/update-formula.sh
+        
+    - name: Check versions and validate inputs
+      id: check
+      shell: bash
+      run: |
+        # Store current version
+        CURRENT_VERSION=""
+        if [ -f "Formula/terminal-jarvis.rb" ]; then
+          CURRENT_VERSION=$(grep -E "^\s*version\s+" "Formula/terminal-jarvis.rb" | sed 's/.*"\([^"]*\)".*/\1/' | head -n1)
+        fi
+        echo "current_version=$CURRENT_VERSION" >> $GITHUB_OUTPUT
+        echo "Current formula version: ${CURRENT_VERSION:-"none"}"
+        
+        # Determine target version
+        if [ -n "${{ inputs.version }}" ]; then
+          TARGET_VERSION="${{ inputs.version }}"
+          echo "Using specified version: v$TARGET_VERSION"
+          
+          # Validate that the specified version exists
+          echo "Validating specified version exists..."
+          if ! curl -sf "https://api.github.com/repos/BA-CalderonMorales/terminal-jarvis/releases/tags/v$TARGET_VERSION" > /dev/null; then
+            echo "ERROR: Version v$TARGET_VERSION does not exist in releases"
+            exit 1
+          fi
+        else
+          # Get latest version
+          echo "Fetching latest version..."
+          LATEST_RELEASE=$(curl -s "https://api.github.com/repos/BA-CalderonMorales/terminal-jarvis/releases/latest")
+          
+          if [ $? -ne 0 ]; then
+            echo "ERROR: Failed to fetch release information from GitHub API"
+            exit 1
+          fi
+          
+          TARGET_VERSION=$(echo "$LATEST_RELEASE" | jq -r '.tag_name' | sed 's/v//')
+          
+          if [ "$TARGET_VERSION" = "null" ] || [ -z "$TARGET_VERSION" ]; then
+            echo "ERROR: Could not fetch latest version from GitHub API"
+            exit 1
+          fi
+          
+          echo "Using latest version: v$TARGET_VERSION"
+        fi
+        
+        echo "target_version=$TARGET_VERSION" >> $GITHUB_OUTPUT
+        
+        # Check if update needed
+        if [ "$CURRENT_VERSION" = "$TARGET_VERSION" ] && [ "${{ inputs.force-update }}" != "true" ]; then
+          echo "update_needed=false" >> $GITHUB_OUTPUT
+          echo "Formula is already at target version (v$TARGET_VERSION)"
+        else
+          echo "update_needed=true" >> $GITHUB_OUTPUT
+          echo "Update needed: ${CURRENT_VERSION:-"none"} → $TARGET_VERSION"
+        fi
+        
+    - name: Create version-specific update script
+      if: steps.check.outputs.update_needed == 'true' && inputs.version != ''
+      shell: bash
+      run: |
+        # Create a temporary script that handles specific version updates
+        cat > scripts/update-formula-version.sh << 'EOF'
+        #!/bin/bash
+        set -e
+        
+        TARGET_VERSION="${{ steps.check.outputs.target_version }}"
+        
+        echo "Updating Terminal Jarvis Homebrew Formula to specific version v$TARGET_VERSION"
+        
+        # Configuration
+        REPO_OWNER="BA-CalderonMorales"
+        REPO_NAME="terminal-jarvis"
+        FORMULA_FILE="Formula/terminal-jarvis.rb"
+        
+        # Get current version from formula if it exists
+        CURRENT_VERSION=""
+        if [ -f "$FORMULA_FILE" ]; then
+            CURRENT_VERSION=$(grep -E "^\s*version\s+" "$FORMULA_FILE" | sed 's/.*"\([^"]*\)".*/\1/' | head -n1)
+            echo "Current formula version: $CURRENT_VERSION"
+        fi
+        
+        echo "Target version: $TARGET_VERSION"
+        
+        # Download archives to calculate checksums
+        echo "Calculating checksums..."
+        MAC_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/v${TARGET_VERSION}/terminal-jarvis-mac.tar.gz"
+        LINUX_URL="https://github.com/${REPO_OWNER}/${REPO_NAME}/releases/download/v${TARGET_VERSION}/terminal-jarvis-linux.tar.gz"
+        
+        # Verify archives exist
+        echo "Verifying Mac archive exists..."
+        if ! curl -sf "$MAC_URL" > /dev/null; then
+            echo "ERROR: Mac archive not found at: $MAC_URL"
+            exit 1
+        fi
+        
+        echo "Verifying Linux archive exists..."
+        if ! curl -sf "$LINUX_URL" > /dev/null; then
+            echo "ERROR: Linux archive not found at: $LINUX_URL"
+            exit 1
+        fi
+        
+        # Calculate checksums
+        echo "Calculating Mac SHA256..."
+        MAC_SHA256=$(curl -sL "$MAC_URL" | sha256sum | cut -d' ' -f1)
+        if [ ${#MAC_SHA256} -ne 64 ]; then
+            echo "ERROR: Invalid Mac SHA256 checksum: $MAC_SHA256"
+            exit 1
+        fi
+        
+        echo "Calculating Linux SHA256..."
+        LINUX_SHA256=$(curl -sL "$LINUX_URL" | sha256sum | cut -d' ' -f1)
+        if [ ${#LINUX_SHA256} -ne 64 ]; then
+            echo "ERROR: Invalid Linux SHA256 checksum: $LINUX_SHA256"
+            exit 1
+        fi
+        
+        echo "Mac SHA256: $MAC_SHA256"
+        echo "Linux SHA256: $LINUX_SHA256"
+        
+        # Generate Formula content
+        echo "Updating formula content..."
+        cat > "$FORMULA_FILE" << FORMULA_EOF
+        # Documentation: https://docs.brew.sh/Formula-Cookbook
+        #                https://rubydoc.brew.sh/Formula
+        # Based on Federico Terzi's approach: https://federicoterzi.com/blog/how-to-publish-your-rust-project-on-homebrew/
+        
+        class TerminalJarvis < Formula
+          desc "A unified command center for AI coding tools"
+          homepage "https://github.com/${REPO_OWNER}/${REPO_NAME}"
+          
+          if OS.mac?
+            url "${MAC_URL}"
+            sha256 "${MAC_SHA256}"
+          elsif OS.linux?
+            url "${LINUX_URL}" 
+            sha256 "${LINUX_SHA256}"
+          end
+          
+          version "${TARGET_VERSION}"
+        
+          def install
+            bin.install "terminal-jarvis"
+          end
+        
+          test do
+            system "#{bin}/terminal-jarvis", "--version"
+          end
+        end
+        FORMULA_EOF
+        
+        echo "Formula updated to version $TARGET_VERSION"
+        
+        # Verify the formula was written correctly
+        if ! grep -q "version \"$TARGET_VERSION\"" "$FORMULA_FILE"; then
+            echo "ERROR: Formula verification failed - version not found in generated file"
+            exit 1
+        fi
+        
+        if ! grep -q "$MAC_SHA256" "$FORMULA_FILE"; then
+            echo "ERROR: Formula verification failed - Mac checksum not found in generated file"
+            exit 1
+        fi
+        
+        if ! grep -q "$LINUX_SHA256" "$FORMULA_FILE"; then
+            echo "ERROR: Formula verification failed - Linux checksum not found in generated file"
+            exit 1
+        fi
+        
+        echo "Formula verification passed"
+        EOF
+        
+        chmod +x scripts/update-formula-version.sh
+        
+    - name: Update formula
+      id: update
+      if: steps.check.outputs.update_needed == 'true'
+      shell: bash
+      run: |
+        # Store git status before update
+        BEFORE_STATUS=$(git status --porcelain)
+        
+        if [ -n "${{ inputs.version }}" ]; then
+          echo "Running version-specific update script..."
+          ./scripts/update-formula-version.sh
+        else
+          echo "Running standard update script..."
+          ./scripts/update-formula.sh
+        fi
+        
+        # Check if files changed
+        AFTER_STATUS=$(git status --porcelain)
+        if [ "$BEFORE_STATUS" != "$AFTER_STATUS" ]; then
+          echo "files_changed=true" >> $GITHUB_OUTPUT
+          echo "Formula files were updated"
+        else
+          echo "files_changed=false" >> $GITHUB_OUTPUT
+          echo "No file changes detected"
+        fi
+        
+    - name: Clean up temporary scripts
+      if: always()
+      shell: bash
+      run: |
+        if [ -f "scripts/update-formula-version.sh" ]; then
+          rm scripts/update-formula-version.sh
+        fi
