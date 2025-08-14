@@ -7,14 +7,14 @@ class TerminalJarvis < Formula
   homepage "https://github.com/BA-CalderonMorales/terminal-jarvis"
   
   if OS.mac?
-    url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.55/terminal-jarvis-mac.tar.gz"
-    sha256 "ff324b382dc211d9e5b71a4a91ac6d845c2664f0aa3d93b299eaeb3b31a0578c"
+    url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.56/terminal-jarvis-mac.tar.gz"
+    sha256 "acfcd6617bf3ae0261a811a6aa1f06b0eb0b751a564f43e9b3120cf70dc07eb2"
   elsif OS.linux?
-    url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.55/terminal-jarvis-linux.tar.gz" 
-    sha256 "ff324b382dc211d9e5b71a4a91ac6d845c2664f0aa3d93b299eaeb3b31a0578c"
+    url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.56/terminal-jarvis-linux.tar.gz" 
+    sha256 "acfcd6617bf3ae0261a811a6aa1f06b0eb0b751a564f43e9b3120cf70dc07eb2"
   end
   
-  version "0.0.55"
+  version "0.0.56"
 
   def install
     bin.install "terminal-jarvis"
