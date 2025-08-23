@@ -15,27 +15,27 @@
 class TerminalJarvis < Formula
   desc "A unified command center for AI coding tools"
   homepage "https://github.com/BA-CalderonMorales/terminal-jarvis"
-  version "0.0.62"
+  version "0.0.67"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.62/terminal-jarvis-macos-x86_64.tar.gz"
-      sha256 ""
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.67/terminal-jarvis-mac.tar.gz"
+      sha256 "70f2b664f57f5f0ad089950ad0a03299a832ba6c2e536b3c1e4fbdc78cfcadb0"
     elsif Hardware::CPU.arm?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.62/terminal-jarvis-macos-aarch64.tar.gz"
-      sha256 ""
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.67/terminal-jarvis-mac.tar.gz"
+      sha256 "70f2b664f57f5f0ad089950ad0a03299a832ba6c2e536b3c1e4fbdc78cfcadb0"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.62/terminal-jarvis-linux-x86_64.tar.gz"
-      sha256 ""
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.67/terminal-jarvis-linux.tar.gz"
+      sha256 "cc4fb5dbe45e94be0d4b4daf973d192da74679be6ee3303b66cf36d21bae0715"
     else
       # Fallback for other Linux architectures
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.62/terminal-jarvis-linux.tar.gz"
-      sha256 "962b7f58a07db6ce3880fdfdff286b85da5eaa664a921fce8d4158bef1adfe4b"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.67/terminal-jarvis-linux.tar.gz"
+      sha256 "cc4fb5dbe45e94be0d4b4daf973d192da74679be6ee3303b66cf36d21bae0715"
     end
   end
 
