@@ -15,27 +15,27 @@
 class TerminalJarvis < Formula
   desc "A unified command center for AI coding tools"
   homepage "https://github.com/BA-CalderonMorales/terminal-jarvis"
-  version "0.0.68"
+  version "0.0.69"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.68/terminal-jarvis-mac.tar.gz"
-      sha256 "8cc208a44f872a576bc9b0ebdf4c002cdc9668ef3b4b3ccb30ba07e5c9137ae3"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.69/terminal-jarvis-mac.tar.gz"
+      sha256 "7d15fb39e1cec7d87646cbf095d6461f31a9781602dcfb634aed611ab890f0ce"
     elsif Hardware::CPU.arm?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.68/terminal-jarvis-mac.tar.gz"
-      sha256 "8cc208a44f872a576bc9b0ebdf4c002cdc9668ef3b4b3ccb30ba07e5c9137ae3"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.69/terminal-jarvis-mac.tar.gz"
+      sha256 "7d15fb39e1cec7d87646cbf095d6461f31a9781602dcfb634aed611ab890f0ce"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.68/terminal-jarvis-linux.tar.gz"
-      sha256 "8eaee925f4211ea3658964994cd6f49861f96b06737b19336121d9a27a10df10"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.69/terminal-jarvis-linux.tar.gz"
+      sha256 "b30698f6a0be0b9f32def781aa85d7591a37ffb876a704673ec4a7cdc00c60fe"
     else
       # Fallback for other Linux architectures
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.68/terminal-jarvis-linux.tar.gz"
-      sha256 "8eaee925f4211ea3658964994cd6f49861f96b06737b19336121d9a27a10df10"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.69/terminal-jarvis-linux.tar.gz"
+      sha256 "b30698f6a0be0b9f32def781aa85d7591a37ffb876a704673ec4a7cdc00c60fe"
     end
   end
 
