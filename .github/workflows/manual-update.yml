@@ -4,9 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Specific version to update to (e.g., 0.0.54). Leave empty to use latest release.'
-        required: false
-        default: ''
+        description: 'Specific version to update to (e.g., 0.0.54).'
+        required: true
         type: string
       force_update:
         description: 'Force update even if already up to date'
@@ -76,7 +75,7 @@ jobs:
             ### Trigger Details
             - **Triggered by:** @${{ github.actor }}
             - **Force update:** ${{ github.event.inputs.force_update }}
-            - **Specific version:** ${{ github.event.inputs.version || 'Latest release' }}
+            - **Specific version:** ${{ github.event.inputs.version }}
             
             ### Validation
             - Formula syntax verified
