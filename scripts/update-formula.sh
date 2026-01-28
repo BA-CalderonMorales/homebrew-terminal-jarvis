@@ -53,11 +53,11 @@ echo "Main repository formula version: $NEW_VERSION"
 # Check if update is needed
 if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
     echo "Formula is already up to date (v$NEW_VERSION)"
-    rm "$TEMP_FORMULA"
     
     # Still verify the content matches exactly
     if diff -q "$FORMULA_FILE" "$TEMP_FORMULA" > /dev/null 2>&1; then
         echo "Formula content is identical"
+        rm "$TEMP_FORMULA"
         exit 0
     else
         echo "Formula versions match but content differs, updating..."
