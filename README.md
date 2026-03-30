@@ -2,6 +2,15 @@
 
 A Homebrew tap for [Terminal Jarvis](https://github.com/BA-CalderonMorales/terminal-jarvis) - a unified command center for AI coding tools.
 
+## Table of Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [For Maintainers](#for-maintainers)
+- [Repository Structure](#repository-structure)
+- [Support](#support)
+- [License](#license)
+
 ## Installation
 
 ```bash
