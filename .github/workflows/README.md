@@ -151,3 +151,18 @@ These are automatically granted via `GITHUB_TOKEN`.
 5. **Testable**: Composite action can be independently tested
 6. **Reusable**: Action could be used by other workflows if needed
 7. **Clear Separation**: Workflow-specific logic separate from update logic
+
+## Security Scan Workflow
+
+**File:** `security-scan.yml`
+
+### Purpose
+Runs automated security scanning on all pushes and pull requests to `main` and `develop`.
+
+### Behavior
+- Invokes the reusable security scan workflow from `.github`
+- Scans for secrets and sensitive data in the repository
+
+### Trigger
+- Push to `main` or `develop`
+- Pull request targeting `main` or `develop`
