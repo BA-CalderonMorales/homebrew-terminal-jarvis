@@ -48,7 +48,7 @@ jobs:
           - Updated version from v${{ steps.update.outputs.current-version }} to v${{ steps.update.outputs.target-version }}
           - Manually triggered update via workflow dispatch"
           
-          git push origin develop
+          git push origin main
           echo "Changes pushed directly to develop branch"
           
       - name: Create Pull Request (if requested)
@@ -95,7 +95,7 @@ jobs:
             *This PR was created manually via workflow dispatch.*
           branch: manual-update-v${{ steps.update.outputs.target-version }}
           branch-suffix: timestamp
-          base: develop
+          base: main
           delete-branch: true
           
       - name: Summary
