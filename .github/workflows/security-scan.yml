@@ -11,4 +11,4 @@ permissions:
 
 jobs:
   security:
-    uses: BA-CalderonMorales/.github/.github/workflows/security-scan.yml@develop
+    uses: BA-CalderonMorales/.github/.github/workflows/security-scan.yml@main
