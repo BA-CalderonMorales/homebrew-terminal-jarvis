@@ -1,26 +1,32 @@
-# Documentation: https://docs.brew.sh/Formula-Cookbook
-#                https://rubydoc.brew.sh/Formula
-# Based on Federico Terzi's approach: https://federicoterzi.com/blog/how-to-publish-your-rust-project-on-homebrew/
-
 class TerminalJarvis < Formula
-  desc "A unified command center for AI coding tools"
+  desc "Data-driven harness switcher for AI coding agents"
   homepage "https://github.com/BA-CalderonMorales/terminal-jarvis"
-  
-  if OS.mac?
-    url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.82/terminal-jarvis-mac.tar.gz"
-    sha256 "19de7b5e48fc21e6ddb3aad261ebc4ffd90fe45f6d01b9516d05f9774e8dc54c"
-  elsif OS.linux?
-    url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.0.82/terminal-jarvis-linux.tar.gz" 
-    sha256 "68059ad419aed4d2099879c0a390124b4cfafa220b7239ce99226e2cd9638871"
+  version "0.1.0"
+  license "MIT"
+
+  on_macos do
+    if Hardware::CPU.intel?
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.0/terminal-jarvis-0.1.0-macos-x64.tar.gz"
+      sha256 "4640bce80f3e526e44e2e1d06f00829ee336eb5484ed0b737280a19cdeff1197"
+    elsif Hardware::CPU.arm?
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.0/terminal-jarvis-0.1.0-macos-arm64.tar.gz"
+      sha256 "bfb23efdd306793b68b620792064e5c23660a2ac6dac11e657e7b72ab3c9e870"
+    end
   end
-  
-  version "0.0.82"
+
+  on_linux do
+    if Hardware::CPU.intel?
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.0/terminal-jarvis-0.1.0-linux-x64-gnu.tar.gz"
+      sha256 "3d18df85e5d4fced954874fbcb16bf4e9c1535315cc8374899b619dace91d14e"
+    end
+  end
 
   def install
-    bin.install "terminal-jarvis"
+    bin.install "bin/terminal-jarvis"
+    pkgshare.install "harnesses"
   end
 
   test do
-    system "#{bin}/terminal-jarvis", "--version"
+    assert_match "terminal-jarvis", shell_output("#{bin}/terminal-jarvis --help")
   end
 end
