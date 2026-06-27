@@ -1,23 +1,23 @@
 class TerminalJarvis < Formula
   desc "Data-driven harness switcher for AI coding agents"
   homepage "https://github.com/BA-CalderonMorales/terminal-jarvis"
-  version "0.1.2"
+  version "0.1.3"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.2/terminal-jarvis-0.1.2-macos-x64.tar.gz"
-      sha256 "361c9fc22e90312514f01e4f98fc9969c1114f29f5bd6264400b8690465b37e5"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.3/terminal-jarvis-0.1.3-macos-x64.tar.gz"
+      sha256 "8464ae4b585823e7e86f78e831c2a470e475db18a49053a8048559d6848e11f7"
     elsif Hardware::CPU.arm?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.2/terminal-jarvis-0.1.2-macos-arm64.tar.gz"
-      sha256 "260ccaa8dfc603c90a6b210e14bca989db471cd6ead04b5f4a7bfaa7822f6a3e"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.3/terminal-jarvis-0.1.3-macos-arm64.tar.gz"
+      sha256 "d1c27239c450aa85be8f139e1101d629380b6ec156f44e16fdd09c83d234ce6c"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.2/terminal-jarvis-0.1.2-linux-x64-gnu.tar.gz"
-      sha256 "8e54377e175842ab903580d36a43d003e87caf1e606875ffddac791b765c47a2"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.3/terminal-jarvis-0.1.3-linux-x64-gnu.tar.gz"
+      sha256 "a5fae18f411bd514c0f2b48511ab7199263b7bf176ab60ca4d40cf68ff3ea6ec"
     end
   end
 
