@@ -1,26 +1,26 @@
 class TerminalJarvis < Formula
   desc "Data-driven harness switcher for AI coding agents"
   homepage "https://github.com/BA-CalderonMorales/terminal-jarvis"
-  version "0.1.17"
+  version "0.1.18"
   license "MIT"
 
   on_macos do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.17/terminal-jarvis-0.1.17-macos-x64.tar.gz"
-      sha256 "9c060b49001e8d11ece9f1db836d221cec627dc333dec945deb0f171d1ce8664"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.18/terminal-jarvis-0.1.18-macos-x64.tar.gz"
+      sha256 "5fa3da6bea205c94c75396235a41124a61ff032cb5c8a90ec4c6011d1914ccb9"
     elsif Hardware::CPU.arm?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.17/terminal-jarvis-0.1.17-macos-arm64.tar.gz"
-      sha256 "560fb7d345ef2e6ddba6354df352bc001e4c1170351b5ecc03450ec91a4986d8"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.18/terminal-jarvis-0.1.18-macos-arm64.tar.gz"
+      sha256 "4468887f7fa6baadd8fbeb6885cd6ad57e0a6947181ecaef510df488260e84ac"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.17/terminal-jarvis-0.1.17-linux-x64-gnu.tar.gz"
-      sha256 "d164700a44f034b3c11193c04ffe306e4c11b50e8a7413a373dd9075f722a82c"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.18/terminal-jarvis-0.1.18-linux-x64-gnu.tar.gz"
+      sha256 "5aa544501c0baa09f52322e5d52e015e3e652bad6b7aa33f2290f1304e8c126f"
     elsif Hardware::CPU.arm?
-      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.17/terminal-jarvis-0.1.17-linux-arm64-gnu.tar.gz"
-      sha256 "03b459d814b20dfcb15544d90b62af1b2784cd1c67b2d2692852091c94a6ad90"
+      url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.18/terminal-jarvis-0.1.18-linux-arm64-gnu.tar.gz"
+      sha256 "220e3a497d0eda79675ec478017e4102ab7c6eb7bf767fcab75cbe3ef4eb7031"
     end
   end
 
