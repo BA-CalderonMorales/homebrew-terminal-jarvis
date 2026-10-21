@@ -7,20 +7,20 @@ class TerminalJarvis < Formula
   on_macos do
     if Hardware::CPU.intel?
       url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.21/terminal-jarvis-0.1.21-macos-x64.tar.gz"
-      sha256 "1f3c0bdb9d7fffdbed951864704e38cdef791e9a3ee94e6ee9e70fa0c3c05b83"
+      sha256 "0f413aa1e921d248d7b7d430f4e70e2563cc9e51c6ca1fe7c35e4d19abaeabe6"
     elsif Hardware::CPU.arm?
       url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.21/terminal-jarvis-0.1.21-macos-arm64.tar.gz"
-      sha256 "f0284e35b268c53b0394b5dfabd1b586a8e7fa2c991d8e032063341666996a7a"
+      sha256 "928c03f205db74039936b4831c3a5c1929cd79222485ec610cffaeba8d182700"
     end
   end
 
   on_linux do
     if Hardware::CPU.intel?
       url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.21/terminal-jarvis-0.1.21-linux-x64-gnu.tar.gz"
-      sha256 "73f52df61f5c86f2b013a7517150bb1f50e82d01f29dce1c730330ae20d03cc1"
+      sha256 "7ad9d76651ecdffe0818ed7e09ae536f3d5403f1c52f2f001603e7aaa30b1b37"
     elsif Hardware::CPU.arm?
       url "https://github.com/BA-CalderonMorales/terminal-jarvis/releases/download/v0.1.21/terminal-jarvis-0.1.21-linux-arm64-gnu.tar.gz"
-      sha256 "3a763e99d4e39a1b53b2b567dbaf930443dd7c8b4a60213cbdf0e6ec80b2438d"
+      sha256 "88dabbdddb2de4d9e471d1cd22b5029645522272cdac4b87807df1163cff11f0"
     end
   end
 
